@@ -1,0 +1,148 @@
+<html>
+<body>
+<head>
+      <title> The last round </title>
+      <style>
+      		.playerInfo {
+      			width: 50%;
+      			height: 300px;
+      			float: left;
+      			text-align: center;
+      		}
+      		#gameInfo, #gameSettings {
+      			clear: both;
+      			width: 100%;
+      			height: 200px;
+      			text-align: center;
+      		}
+      </style>
+</head>
+<body>
+
+	<div class= "playerInfo">
+		<h1>Player 1</h1>
+		<h2>Current Score:</h2>
+		<h3 id="player1Current"></h3>
+		<h2>Total Score:</h2>
+		<h3 id="player1Total"></h3>
+	</div>
+		<div class= "playerInfo">
+		<h1>Player 2</h1>
+		<h2>Current Score:</h2>
+		<h3 id="player2Current"></h3>
+		<h2>Total Score:</h2>
+		<h3 id="player2Total"></h3>
+	</div>
+	<div id="gameInfo">
+		<h1 id="playerTurn">Player 1's turn</h1>
+		<h1 id="winner"></h1>
+		<button onclick="rollDice()">Roll!</button>
+	</div>
+	<div id="gameSettings">
+		<label>Number of dice:</label>
+		<input type="number" id="dice" value="1">
+		<label>Maximum score:</label>
+		<input type="number" id="maxScore" value="21">
+		<button onclick="updateSettings()">Update Settings!</button>
+	</div>
+
+	<script>
+		var player1TotalScore = 0
+		var player2TotalScore = 0
+		var player1LastRoll = 0
+		var player2LastRoll = 0
+		var maxScore = 21;
+		var numberOfDice = 1;
+		var playerTracker = 1;
+
+		function updateSettings() {
+			userInputDice = parseInt(document.getElementById("dice").value);
+			if(userInputDice >= 1){
+				numberOfDice = userInputDice
+				console.log("number of dice: " + numberOfDice)
+			}
+			userInputmaxScore = document.getElementById("maxScore").value;
+			if(userInputmaxScore > 6){
+				maxScore = userInputmaxScore
+				console.log("maxScore: " + maxScore)
+			}
+			console.log()
+		}
+
+		function rollDice(){
+			var roll = 0;
+			var rollTimes = 0;
+			
+			do {
+				//roll = roll + generateRandomNr();
+				roll += Math.floor(Math.random() * Math.floor(6))+1;
+				rollTimes++;
+				console.log("nr of roll: " + rollTimes);
+				console.log("value of roll: " + roll);
+			} while (rollTimes < numberOfDice);
+
+			//var roll = generateRandomNr();
+			//console.log(roll);
+
+			if (playerTracker > 0) {
+				// Player 1's turn
+				// roll and display current roll
+				player1LastRoll = roll;
+				document.getElementById("player1Current").innerHTML = player1LastRoll;
+				// roll and display current roll
+				player1TotalScore += player1LastRoll;
+				document.getElementById("player1Total").innerHTML = player1TotalScore;
+				//show whose turn it is
+				document.getElementById("playerTurn").innerHTML = "Player 2's turn";
+
+				playerTracker = playerTracker * -1;
+			} else {
+				// Player 2's turn
+				// roll and display current roll
+				player2LastRoll = roll;
+				document.getElementById("player2Current").innerHTML = player2LastRoll;
+				// roll and display current roll
+				player2TotalScore += player2LastRoll;
+				document.getElementById("player2Total").innerHTML = player2TotalScore;
+				//show whose turn it is
+				document.getElementById("playerTurn").innerHTML = "Player 1's turn";
+
+				playerTracker = playerTracker * -1;
+			}
+
+			checkWinner();
+		}
+
+		function checkWinner(){
+			if (player1TotalScore > maxScore){
+				document.getElementById("playerTurn").innerHTML = "Player 2 wins!!";
+				document.getElementsByTagName("button")[0].disabled = true;
+			}
+			if (player2TotalScore > maxScore){
+				document.getElementById("playerTurn").innerHTML = "Player 1 wins!!";
+				document.getElementsByTagName("button")[0].disabled = true;
+			}
+		}
+
+		function setNumber2(){
+			myNumber2 = generateRandomNr();
+			document.getElementsByTagName("div")[1].innerHTML = myNumber2;
+		}
+
+		function generateRandomNr(){
+			var max_range = 6;
+			return Math.floor(Math.random() * Math.floor(max_range))+1;
+		}
+
+		function compareNumbers(){
+			switch(true) {
+				case( myNumber1 > myNumber2 ): alert("Number 1 is bigger"); break;
+				//case( myNumber1 > myNumber2 ): document.write("Number 1 is bigger"); break;
+				case( myNumber1 < myNumber2 ): alert("Number 2 is bigger");	break;
+				default: alert("both numbers are equal");			
+			}
+		}
+	</script>
+
+</body>
+</html>
